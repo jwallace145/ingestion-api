@@ -1,5 +1,6 @@
 package com.finance.ingestion.repository;
 
+import com.finance.ingestion.model.Cryptocurrency;
 import com.finance.ingestion.model.Stock;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -73,5 +74,54 @@ public class AlphaVantageRepository {
         }
 
         return stocks;
+    }
+
+    public List<Cryptocurrency> getCryptos(String function, String symbol, String market) {
+        List<Cryptocurrency> cryptos = new ArrayList<Cryptocurrency>();
+
+        String uri = this.alphavantageUri
+                .concat("function=" + function + "&")
+                .concat("symbol=" + symbol + "&")
+                .concat("market=" + market + "&")
+                .concat("apikey=" + this.apiKey);
+
+        String result = this.restTemplate.getForObject(uri, String.class);
+
+        try {
+            JSONObject jsonData = (JSONObject) this.jsonParser.parse(result);
+
+            Map cryptosData = (Map) jsonData.get("Time Series (Digital Currency Daily)");
+
+            Iterator<Map.Entry> cryptosIterator = cryptosData.entrySet().iterator();
+            while (cryptosIterator.hasNext()) {
+                Map.Entry pair = cryptosIterator.next();
+                JSONObject cryptoData = (JSONObject) this.jsonParser.parse(pair.getValue().toString());
+                String timestamp = (String) pair.getKey();
+                String openStr = (String) cryptoData.get("1a. open (" + market + ")");
+                String highStr = (String) cryptoData.get("2a. high (" + market + ")");
+                String lowStr = (String) cryptoData.get("3a. low (" + market + ")");
+                String closeStr = (String) cryptoData.get("4a. close (" + market + ")");
+                String volumeStr = (String) cryptoData.get("5. volume");
+                String marketCapStr = (String) cryptoData.get("6. market cap (" + market + ")");
+
+                float open = Float.parseFloat(openStr);
+                float high = Float.parseFloat(highStr);
+                float low = Float.parseFloat(lowStr);
+                float close = Float.parseFloat(closeStr);
+                float volume = Float.parseFloat(volumeStr);
+                float marketCap = Float.parseFloat(marketCapStr);
+
+                Cryptocurrency cryptocurrency = new Cryptocurrency(symbol, timestamp, open, high, low, close, volume, marketCap);
+
+                System.out.println(cryptocurrency.toString());
+
+                cryptos.add(cryptocurrency);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return cryptos;
+
     }
 }

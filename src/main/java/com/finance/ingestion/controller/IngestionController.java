@@ -1,5 +1,6 @@
 package com.finance.ingestion.controller;
 
+import com.finance.ingestion.model.Cryptocurrency;
 import com.finance.ingestion.model.Stock;
 import com.finance.ingestion.repository.AlphaVantageRepository;
 import com.finance.ingestion.repository.IngestionRepository;
@@ -33,4 +34,10 @@ public class IngestionController {
         this.ingestionRepository.ingestStocks(stocks);
     }
 
+    @RequestMapping(value = "/cryptos/{function}/{symbol}/{market}", method = RequestMethod.GET)
+    public void ingestCryptos(@PathVariable("function") String function, @PathVariable("symbol") String symbol,
+                              @PathVariable("market") String market) {
+        List<Cryptocurrency> cryptos = this.alphaVantageRepository.getCryptos(function, symbol, market);
+        this.ingestionRepository.ingestCryptos(cryptos);
+    }
 }
