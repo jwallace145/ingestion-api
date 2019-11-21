@@ -1,10 +1,13 @@
 package com.finance.ingestion.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Stock {
 
     private String symbol;
 
-    private String timestamp;
+    private Date timestamp;
 
     private float open;
 
@@ -16,7 +19,7 @@ public class Stock {
 
     private int volume;
 
-    public Stock(String symbol, String timestamp, float open, float high, float low, float close, int volume) {
+    public Stock(String symbol, Date timestamp, float open, float high, float low, float close, int volume) {
         this.symbol = symbol;
         this.timestamp = timestamp;
         this.open = open;
@@ -34,11 +37,11 @@ public class Stock {
         this.symbol = symbol;
     }
 
-    public String getTimestamp() {
+    public Date getTimestamp() {
         return this.timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -84,9 +87,12 @@ public class Stock {
 
     @Override
     public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String timestampStr = format.format(this.timestamp);
+
         return "{" +
                 "\"symbol\": \"" + this.symbol + "\", " +
-                "\"timestamp\": \"" + this.timestamp + "\", " +
+                "\"timestamp\": \"" + timestampStr + "\", " +
                 "\"open\": " + this.open + ", " +
                 "\"high\": " + this.high + ", " +
                 "\"low\": " + this.low + ", " +

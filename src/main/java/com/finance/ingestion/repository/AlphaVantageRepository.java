@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /*
 this class is in charge of calling the alpha vantage api, consuming the data, and parsing the data
@@ -32,7 +30,7 @@ public class AlphaVantageRepository {
     private String apiKey;
 
     public List<Stock> getStocks(String function, String symbol, String interval, String outputSize) {
-        List<Stock> stocks = new ArrayList<Stock>();
+        List<Stock> stocks = new ArrayList<>();
 
         String uri = this.alphavantageUri
                 .concat("function=" + function + "&")
@@ -52,13 +50,14 @@ public class AlphaVantageRepository {
             while (stocksIterator.hasNext()) {
                 Map.Entry pair = stocksIterator.next();
                 JSONObject stockData = (JSONObject) this.jsonParser.parse(pair.getValue().toString());
-                String timestamp = (String) pair.getKey();
+                String timestampStr = (String) pair.getKey();
                 String openStr = (String) stockData.get("1. open");
                 String highStr = (String) stockData.get("2. high");
                 String lowStr = (String) stockData.get("3. low");
                 String closeStr = (String) stockData.get("4. close");
                 String volumeStr = (String) stockData.get("5. volume");
 
+                Date timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(timestampStr);
                 float open = Float.parseFloat(openStr);
                 float high = Float.parseFloat(highStr);
                 float low = Float.parseFloat(lowStr);
@@ -69,7 +68,7 @@ public class AlphaVantageRepository {
 
                 stocks.add(stock);
             }
-        } catch (ParseException e) {
+        } catch (ParseException | java.text.ParseException e) {
             e.printStackTrace();
         }
 
