@@ -95,7 +95,7 @@ public class AlphaVantageRepository {
             while (cryptosIterator.hasNext()) {
                 Map.Entry pair = cryptosIterator.next();
                 JSONObject cryptoData = (JSONObject) this.jsonParser.parse(pair.getValue().toString());
-                String timestamp = (String) pair.getKey();
+                String timestampStr = (String) pair.getKey();
                 String openStr = (String) cryptoData.get("1a. open (" + market + ")");
                 String highStr = (String) cryptoData.get("2a. high (" + market + ")");
                 String lowStr = (String) cryptoData.get("3a. low (" + market + ")");
@@ -103,6 +103,7 @@ public class AlphaVantageRepository {
                 String volumeStr = (String) cryptoData.get("5. volume");
                 String marketCapStr = (String) cryptoData.get("6. market cap (" + market + ")");
 
+                Date timestamp = new SimpleDateFormat("yyyy-MM-dd").parse(timestampStr);
                 float open = Float.parseFloat(openStr);
                 float high = Float.parseFloat(highStr);
                 float low = Float.parseFloat(lowStr);
@@ -114,7 +115,7 @@ public class AlphaVantageRepository {
 
                 cryptos.add(cryptocurrency);
             }
-        } catch (ParseException e) {
+        } catch (ParseException | java.text.ParseException e) {
             e.printStackTrace();
         }
 

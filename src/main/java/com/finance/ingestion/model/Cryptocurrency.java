@@ -1,10 +1,13 @@
 package com.finance.ingestion.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Cryptocurrency {
 
     private String symbol;
 
-    private String timestamp;
+    private Date timestamp;
 
     private float open;
 
@@ -18,7 +21,7 @@ public class Cryptocurrency {
 
     private float marketCap;
 
-    public Cryptocurrency(String symbol, String timestamp, float open, float high, float low, float close, float volume, float marketCap) {
+    public Cryptocurrency(String symbol, Date timestamp, float open, float high, float low, float close, float volume, float marketCap) {
         this.symbol = symbol;
         this.timestamp = timestamp;
         this.open = open;
@@ -37,11 +40,11 @@ public class Cryptocurrency {
         this.symbol = symbol;
     }
 
-    public String getTimestamp() {
+    public Date getTimestamp() {
         return this.timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -95,9 +98,12 @@ public class Cryptocurrency {
 
     @Override
     public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String timestampStr = format.format(this.timestamp);
+
         return "{" +
                 "\"symbol\": \"" + this.symbol + "\", " +
-                "\"timestamp\": \"" + this.timestamp + "\", " +
+                "\"timestamp\": \"" + timestampStr + "\", " +
                 "\"open\": " + this.open + ", " +
                 "\"high\": " + this.high + ", " +
                 "\"low\": " + this.low + ", " +
