@@ -22,7 +22,7 @@ public class IngestionRepository {
     private String databaseLibraryUri;
 
     public void ingestStocks(List<Stock> stocks) {
-        String uri = this.databaseLibraryUri.concat("/stocks/");
+        String uri = this.databaseLibraryUri.concat("/stocks/insert");
 
         for (int i = 0; i < stocks.size(); i++) {
             HttpEntity<String> request = new HttpEntity<String>(stocks.get(i).toString(), this.httpHeaders);
@@ -31,7 +31,7 @@ public class IngestionRepository {
     }
 
     public void ingestCryptos(List<Cryptocurrency> cryptos) {
-        String uri = this.databaseLibraryUri.concat("/cryptos/");
+        String uri = this.databaseLibraryUri.concat("/cryptos/insert");
 
         for (int i = 0; i < cryptos.size(); i++) {
             HttpEntity<String> request = new HttpEntity<String>(cryptos.get(i).toString(), this.httpHeaders);

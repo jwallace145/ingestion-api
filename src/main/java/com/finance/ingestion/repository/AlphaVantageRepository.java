@@ -32,6 +32,11 @@ public class AlphaVantageRepository {
     public List<Stock> getStocks(String function, String symbol, String interval, String outputSize) {
         List<Stock> stocks = new ArrayList<>();
 
+        System.out.println(function);
+        System.out.println(symbol);
+        System.out.println(interval);
+        System.out.println(outputSize);
+
         String uri = this.alphavantageUri
                 .concat("function=" + function + "&")
                 .concat("symbol=" + symbol + "&")
