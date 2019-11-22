@@ -98,6 +98,7 @@ public class Cryptocurrency {
 
     @Override
     public String toString() {
+        // convert the given date this.timestamp to a string of date pattern that mongoDB can parse
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         String timestampStr = format.format(this.timestamp);
 
